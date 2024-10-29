@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rastreamento de Pedidos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #003366; /* Azul Escuro */
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ffcc00; /* Amarelo */
+            color: #003366; /* Azul Escuro */
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e6b800; /* Amarelo Escuro */
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e6f7ff; /* Azul Claro */
+            border: 1px solid #b3d1ff;
+            border-radius: 4px;
+            color: #003366; /* Azul Escuro */
+            font-size: 16px;
+            display: none; /* Inicialmente escondido */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Rastreamento de Pedidos</h1>
+    <input type="text" id="numeroPedido" placeholder="Digite seu número de pedido" required>
+    <button onclick="rastrearPedido()">Rastrear</button>
+    <div id="resultado"></div>
+</div>
+
+<script>
+    function rastrearPedido() {
+        const numeroPedido = document.getElementById("numeroPedido").value;
+        const resultado = document.getElementById("resultado");
+
+        // URL do seu Web App do Google Apps Script
+        const url = https://script.google.com/macros/s/AKfycbwgJ3ImxLw2gQUysGTl7QVARxQUh4-SobP9OX4dY7RXbMIEko6wWbgqWpM0iaXbI7w_/exec; // Substitua com a URL do seu Web App
+
+        // Fazendo a requisição POST
+        fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `numeroPedido=${encodeURIComponent(numeroPedido)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                resultado.innerHTML = data.error;
+            } else {
+                resultado.innerHTML = `
+                    <strong>Nome do Cliente:</strong> ${data.cliente}<br>
+                    <strong>Data do Pedido:</strong> ${data.dataPedido}<br>
+                    <strong>Status do Pedido:</strong> ${data.status}<br>
+                    <strong>Data Estimada de Entrega:</strong> ${data.dataEntrega}
+                `;
+            }
+            resultado.style.display = "block"; // Exibe o resultado
+        })
+        .catch(error => {
+            resultado.innerHTML = "Erro ao rastrear o pedido.";
+            resultado.style.display = "block"; // Exibe o resultado
+        });
+    }
+</script>
+
+</body>
+</html>
